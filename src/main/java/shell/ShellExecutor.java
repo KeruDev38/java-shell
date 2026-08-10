@@ -84,18 +84,19 @@ public class ShellExecutor {
     private void executeProgram(ShellInput input, String path) {
         List<String> executable = new ArrayList<>();
         executable.add(path);
+
         String arguments = input.getArguments();
         if (arguments != null && !arguments.isEmpty()) {
             executable.addAll(
-                    Arrays.asList(arguments.trim().split(" "))
+                    Arrays.asList(arguments.trim().split("\\s+"))
             );
         }
 
-        System.out.println("Program was passed " + executable.size() + " args (including program name).");
-        System.out.println("Arg #0 (program name): " + input.getCommand());
-        for (int i = 1; i < executable.size(); i++) {
-            System.out.println("Arg #" + i + ": " + executable.get(i));
-        }
+//        System.out.println("Program was passed " + executable.size() + " args (including program name).");
+//        System.out.println("Arg #0 (program name): " + input.getCommand());
+//        for (int i = 1; i < executable.size(); i++) {
+//            System.out.println("Arg #" + i + ": " + executable.get(i));
+//        }
 
         ProcessBuilder pb = new ProcessBuilder(executable);
         pb.inheritIO();
