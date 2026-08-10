@@ -8,20 +8,19 @@ import java.util.Scanner;
 public class ShellManager {
     private final Scanner sc;
     private final ShellExecutor executor;
-    private final ShellContext context;
 
     public ShellManager(Scanner sc) {
         this.sc = sc;
         this.executor = new ShellExecutor();
-        this.context = new ShellContext();
     }
 
     public void begin() {
         checkIntegrity();
 
-        while(context.isRunning()) {
+        boolean running = true;
+        while(running) {
             ShellInput input = readCommand();
-            executor.execute(input);
+            running = executor.execute(input);
         }
     }
 

@@ -33,7 +33,7 @@ public class ShellExecutor {
     }
 
     private boolean type(ShellInput input) {
-        String targetStr = input.getCommand();
+        String targetStr = input.getArguments().trim();
         CommandType target = CommandType.fromString(targetStr);
 
         if (target != null) {
