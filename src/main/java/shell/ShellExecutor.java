@@ -83,7 +83,7 @@ public class ShellExecutor {
 
     private void executeProgram(ShellInput input, String path) {
         List<String> executable = new ArrayList<>();
-        executable.add(path);
+        executable.add(input.getCommand());
 
         String arguments = input.getArguments();
         if (arguments != null && !arguments.isEmpty()) {
