@@ -37,7 +37,7 @@ public class ShellExecutor {
         String fullPath = findExecutable(input.getCommand());
 
         if (fullPath != null) {
-            executeProgram(input.getArguments(), fullPath);
+            executeProgram(input, fullPath);
         } else {
             commandNotFound(input.getCommand());
         }
