@@ -34,27 +34,16 @@ public class ShellExecutor {
     }
 
     private void resolveUnknown(ShellInput input) {
-        if (Files.isExecutable(Paths.get(input.getCommand()))) {
-            executeProgram(input);
+        String fullPath = findExecutable(input.getCommand());
+
+        if (fullPath != null) {
+            executeProgram(input.getArguments(), fullPath);
         } else {
             commandNotFound(input.getCommand());
         }
     }
 
-    private void executeProgram(ShellInput input) {
-        List<String> executable = new ArrayList<>();
-        executable.add(input.getCommand());
-        executable.addAll(
-                Arrays.asList(input.getArguments().split(" "))
-        );
 
-        ProcessBuilder pb = new ProcessBuilder(executable);
-        try {
-            pb.start().waitFor();
-        } catch (IOException | InterruptedException e ) {
-            e.printStackTrace();
-        }
-    }
 
     private boolean echo(ShellInput input) {
         System.out.println(input.getArguments());
@@ -82,17 +71,7 @@ public class ShellExecutor {
         return true;
     }
 
-    private String findExecutable(String target) {
-        for (String route : ctx.getEnv().split(File.pathSeparator)) {
-            Path fullPath = Paths.get(route, target);
-            String fileName = fullPath.getFileName().toString();
 
-            if (Files.isExecutable(fullPath)) {
-                return fullPath.toString();
-            }
-        }
-        return null;
-    }
 
     private boolean exit(ShellInput input) {
         return false;
@@ -100,5 +79,33 @@ public class ShellExecutor {
 
     private void commandNotFound(String command) {
         System.out.println(command + ": command not found");
+    }
+
+    private void executeProgram(String arguments, String path) {
+        List<String> executable = new ArrayList<>();
+        executable.add(path);
+        if (arguments != null && !arguments.isEmpty()) {
+            executable.addAll(
+                    Arrays.asList(arguments.trim().split(" "))
+            );
+        }
+
+        ProcessBuilder pb = new ProcessBuilder(executable);
+        try {
+            pb.start().waitFor();
+        } catch (IOException | InterruptedException e ) {
+            e.printStackTrace();
+        }
+    }
+
+    private String findExecutable(String target) {
+        for (String route : ctx.getEnv().split(File.pathSeparator)) {
+            Path fullPath = Paths.get(route, target);
+
+            if (Files.isExecutable(fullPath)) {
+                return fullPath.toString();
+            }
+        }
+        return null;
     }
 }
