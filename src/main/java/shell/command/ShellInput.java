@@ -1,10 +1,10 @@
-package shell;
+package shell.command;
 
-public class ShellCommand {
+public class ShellInput {
     private final String command;
     private final String arguments;
 
-    public ShellCommand(String command, String arguments) {
+    public ShellInput(String command, String arguments) {
         this.command = command;
         this.arguments = arguments;
     }

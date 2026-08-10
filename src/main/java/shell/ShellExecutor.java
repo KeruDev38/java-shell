@@ -1,46 +1,54 @@
 package shell;
 
+import shell.command.Execution;
+import shell.command.CommandType;
+import shell.command.ShellInput;
+
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class ShellExecutor {
-    private final Map<Command, Consumer<String>> commandsMap = new EnumMap<>(Command.class);
-    private boolean isRunning = true;
+    private final Map<CommandType, Execution> commandsMap = new EnumMap<>(CommandType.class);
 
     public ShellExecutor() {
-        commandsMap.put(Command.ECHO, this::echo);
-        commandsMap.put(Command.TYPE, this::type);
-        commandsMap.put(Command.EXIT, this::exit);
+        commandsMap.put(CommandType.ECHO, this::echo);
+        commandsMap.put(CommandType.TYPE, this::type);
+        commandsMap.put(CommandType.EXIT, this::exit);
     }
 
-    public void execute(ShellCommand input) {
-        Command command = Command.fromString(input.getCommand());
+    public boolean execute(ShellInput input) {
+        CommandType type = CommandType.fromString(input.getCommand());
 
-        if(command != null && commandsMap.containsKey(command)) {
-            commandsMap.get(command);
+        if(type != null && commandsMap.containsKey(type)) {
+            return commandsMap.get(type).execute(input);
         } else {
             commandNotFound(input.getCommand());
+            return true;
         }
     }
 
-    public boolean isRunning() {
-        return isRunning;
+    private boolean echo(ShellInput input) {
+        System.out.println(input.getArguments());
+        return true;
+    }
+
+    private boolean type(ShellInput input) {
+        String targetStr = input.getCommand();
+        CommandType target = CommandType.fromString(targetStr);
+
+        if (target != null) {
+            System.out.println(targetStr + " is a shell builtin");
+        } else {
+            commandNotFound(targetStr);
+        }
+        return true;
+    }
+
+    private boolean exit(ShellInput input) {
+        return false;
     }
 
     private void commandNotFound(String command) {
         System.out.println(command + ": command not found");
-    }
-
-    private void echo(String argument) {
-        System.out.println(argument);
-    }
-
-    private void type(String argument) {
-        // Si el argumento es un commando, lo explica, sino, llama a commandNotFound
-    }
-
-    private void exit(String argument) {
-        this.isRunning = false;
     }
 }
