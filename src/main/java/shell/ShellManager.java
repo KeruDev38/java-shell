@@ -6,25 +6,19 @@ import java.util.Scanner;
 
 public class ShellManager {
     private final Scanner sc;
-    private final ShellAnswer answer;
+    private final ShellExecutor executor;
 
     public ShellManager(Scanner sc) {
         this.sc = sc;
-        this.answer = new ShellAnswer();
+        this.executor = new ShellExecutor();
     }
 
     public void begin() {
         checkIntegrity();
 
-        while(true) {
+        while(executor.isRunning()) {
             ShellCommand input = readCommand();
-            String command = input.getCommand();
-
-            if (command.equals("exit")) break;
-            else if (command.equals("echo")) {
-                answer.echo(input.getArguments());
-            }
-            else answer.commandNotFound(command);
+            executor.execute(input);
         }
     }
 
