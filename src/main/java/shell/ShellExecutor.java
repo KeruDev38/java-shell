@@ -81,19 +81,26 @@ public class ShellExecutor {
         System.out.println(command + ": command not found");
     }
 
-    private void executeProgram(String arguments, String path) {
+    private void executeProgram(ShellInput input, String path) {
         List<String> executable = new ArrayList<>();
         executable.add(path);
+        String arguments = input.getArguments();
         if (arguments != null && !arguments.isEmpty()) {
             executable.addAll(
                     Arrays.asList(arguments.trim().split(" "))
             );
         }
 
+        System.out.println("Program was passed " + executable.size() + " args (including program name).");
+        System.out.println("Arg #0 (program name): " + executable.getFirst());
+        for (int i = 1; i < executable.size(); i++) {
+            System.out.println("Arg #" + i + ": " + executable.get(i));
+        }
+
         ProcessBuilder pb = new ProcessBuilder(executable);
         try {
-            pb.start().waitFor();
-        } catch (IOException | InterruptedException e ) {
+            System.out.println(pb.start().pid());
+        } catch (IOException e ) {
             e.printStackTrace();
         }
     }
