@@ -48,7 +48,7 @@ public class ShellExecutor {
 
         } else if (ctx.getEnv() != null && !ctx.getEnv().isEmpty()) {
             String fullPath = findExecutable(targetStr);
-            if (!fullPath.isEmpty()) {
+            if (fullPath != null) {
                 System.out.println(targetStr + " is " + fullPath);
             }
 
@@ -60,14 +60,14 @@ public class ShellExecutor {
 
     private String findExecutable(String target) {
         for (String route : ctx.getEnv().split(File.pathSeparator)) {
-            Path fullPath = Paths.get(route);
+            Path fullPath = Paths.get(route, target);
             String fileName = fullPath.getFileName().toString();
 
-            if (fileName.equals(target) && Files.isExecutable(fullPath)) {
-                return route;
+            if (Files.isExecutable(fullPath)) {
+                return fullPath.toString();
             }
         }
-        return "";
+        return null;
     }
 
     private boolean exit(ShellInput input) {
