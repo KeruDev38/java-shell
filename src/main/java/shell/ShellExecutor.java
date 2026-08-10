@@ -4,10 +4,15 @@ import shell.command.Execution;
 import shell.command.CommandType;
 import shell.command.ShellInput;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.Map;
 
 public class ShellExecutor {
+    private final ShellContext ctx = new ShellContext();
     private final Map<CommandType, Execution> commandsMap = new EnumMap<>(CommandType.class);
 
     public ShellExecutor() {
@@ -21,6 +26,7 @@ public class ShellExecutor {
 
         if(type != null && commandsMap.containsKey(type)) {
             return commandsMap.get(type).execute(input);
+
         } else {
             commandNotFound(input.getCommand());
             return true;
@@ -38,10 +44,30 @@ public class ShellExecutor {
 
         if (target != null) {
             System.out.println(input.getArguments() + " is a shell builtin");
-        } else {
-            System.out.println(targetStr + ": not found");
+            return true;
+
+        } else if (ctx.getEnv() != null && !ctx.getEnv().isEmpty()) {
+            String fullPath = findExecutable(targetStr);
+            if (!fullPath.isEmpty()) {
+                System.out.println(targetStr + " is " + fullPath);
+            }
+
         }
+
+        System.out.println(targetStr + ": not found");
         return true;
+    }
+
+    private String findExecutable(String target) {
+        for (String route : ctx.getEnv().split(File.pathSeparator)) {
+            Path fullPath = Paths.get(route);
+            String fileName = fullPath.getFileName().toString();
+
+            if (fileName.equals(target) && Files.isExecutable(fullPath)) {
+                return route;
+            }
+        }
+        return "";
     }
 
     private boolean exit(ShellInput input) {

@@ -1,13 +1,9 @@
 package shell;
 
 public class ShellContext {
-    private boolean isRunning = true;
+    private final String env = System.getenv("PATH");
 
-    public void stop() {
-        this.isRunning = false;
-    }
-
-    public boolean isRunning() {
-        return this.isRunning;
+    public String getEnv() {
+        return env;
     }
 }
