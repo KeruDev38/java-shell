@@ -5,11 +5,11 @@ import shell.command.CommandType;
 import shell.command.ShellInput;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.*;
 
 public class ShellExecutor {
     private final ShellContext ctx = new ShellContext();
@@ -28,8 +28,31 @@ public class ShellExecutor {
             return commandsMap.get(type).execute(input);
 
         } else {
-            commandNotFound(input.getCommand());
+            resolveUnknown(input);
             return true;
+        }
+    }
+
+    private void resolveUnknown(ShellInput input) {
+        if (Files.isExecutable(Paths.get(input.getCommand()))) {
+            executeProgram(input);
+        } else {
+            commandNotFound(input.getCommand());
+        }
+    }
+
+    private void executeProgram(ShellInput input) {
+        List<String> executable = new ArrayList<>();
+        executable.add(input.getCommand());
+        executable.addAll(
+                Arrays.asList(input.getArguments().split(" "))
+        );
+
+        ProcessBuilder pb = new ProcessBuilder(executable);
+        try {
+            pb.start().waitFor();
+        } catch (IOException | InterruptedException e ) {
+            e.printStackTrace();
         }
     }
 

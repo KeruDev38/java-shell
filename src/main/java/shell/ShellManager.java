@@ -1,7 +1,7 @@
 package shell;
 
 import shell.command.ShellInput;
-import shell.exception.IncorrectContructionException;
+import shell.exception.IncorrectConstructionException;
 
 import java.util.Scanner;
 
@@ -34,6 +34,6 @@ public class ShellManager {
     }
 
     private void checkIntegrity() {
-        if (sc == null) throw new IncorrectContructionException("Scanner cannot be null.");
+        if (sc == null) throw new IncorrectConstructionException("Scanner cannot be null.");
     }
 }
