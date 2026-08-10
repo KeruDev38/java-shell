@@ -98,9 +98,10 @@ public class ShellExecutor {
         }
 
         ProcessBuilder pb = new ProcessBuilder(executable);
+        pb.inheritIO();
         try {
-            System.out.println(pb.start().pid());
-        } catch (IOException e ) {
+            pb.start().waitFor();
+        } catch (IOException | InterruptedException e ) {
             e.printStackTrace();
         }
     }
