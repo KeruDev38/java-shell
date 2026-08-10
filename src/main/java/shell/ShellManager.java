@@ -30,8 +30,11 @@ public class ShellManager {
 
     private ShellCommand readCommand() {
         System.out.print("$ ");
-        String[] splitted = sc.nextLine().trim().split("//s+", 2);
-        return new ShellCommand(splitted[0], splitted[1]);
+        String[] splitted = sc.nextLine().trim().split("\\s+", 2);
+        return new ShellCommand(
+                splitted[0],
+                splitted.length > 1 ? splitted[1] : ""
+        );
     }
 
     private void checkIntegrity() {
