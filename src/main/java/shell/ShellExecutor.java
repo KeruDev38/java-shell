@@ -39,7 +39,7 @@ public class ShellExecutor {
         if (target != null) {
             System.out.println(input.getArguments() + " is a shell builtin");
         } else {
-            commandNotFound(targetStr);
+            System.out.println(targetStr + ": not found");
         }
         return true;
     }
