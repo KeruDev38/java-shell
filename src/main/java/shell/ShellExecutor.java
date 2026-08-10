@@ -37,7 +37,7 @@ public class ShellExecutor {
         CommandType target = CommandType.fromString(targetStr);
 
         if (target != null) {
-            System.out.println(targetStr + " is a shell builtin");
+            System.out.println(input.getArguments() + " is a shell builtin");
         } else {
             commandNotFound(targetStr);
         }
