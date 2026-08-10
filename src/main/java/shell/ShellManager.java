@@ -30,17 +30,11 @@ public class ShellManager {
 
     private ShellCommand readCommand() {
         System.out.print("$ ");
-        String input = sc.nextLine();
         String[] splitted = sc.nextLine().trim().split("//s+", 2);
         return new ShellCommand(splitted[0], splitted[1]);
     }
 
     private void checkIntegrity() {
         if (sc == null) throw new IncorrectContructionException("Scanner cannot be null.");
-        if (answer == null) throw new IncorrectContructionException("Shell Answer cannot be null.");
-    }
-
-    private void commandNotFound(String command) {
-        System.out.println(command + ": command not found");
     }
 }
