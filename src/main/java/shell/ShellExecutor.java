@@ -45,13 +45,14 @@ public class ShellExecutor {
         if (target != null) {
             System.out.println(input.getArguments() + " is a shell builtin");
             return true;
+        }
 
-        } else if (ctx.getEnv() != null && !ctx.getEnv().isEmpty()) {
+        if (ctx.getEnv() != null && !ctx.getEnv().isEmpty()) {
             String fullPath = findExecutable(targetStr);
             if (fullPath != null) {
                 System.out.println(targetStr + " is " + fullPath);
+                return true;
             }
-
         }
 
         System.out.println(targetStr + ": not found");
