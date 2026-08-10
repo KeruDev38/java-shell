@@ -92,7 +92,7 @@ public class ShellExecutor {
         }
 
         System.out.println("Program was passed " + executable.size() + " args (including program name).");
-        System.out.println("Arg #0 (program name): " + executable.getFirst());
+        System.out.println("Arg #0 (program name): " + input.getCommand());
         for (int i = 1; i < executable.size(); i++) {
             System.out.println("Arg #" + i + ": " + executable.get(i));
         }
