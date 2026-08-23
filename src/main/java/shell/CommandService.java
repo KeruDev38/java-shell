@@ -43,7 +43,7 @@ public class CommandService {
             return true;
         }
 
-        Optional<String> executable = resolver.findExecutable(target);
+        Optional<Path> executable = resolver.findExecutable(target);
 
         if (executable.isPresent()) {
             System.out.println(target + " is " + executable.get());

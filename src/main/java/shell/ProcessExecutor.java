@@ -3,14 +3,15 @@ package shell;
 import shell.command.ShellInput;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class ProcessExecutor {
-    public void executeProgram(ShellInput input) {
+    public void executeProgram(Path executablePath, ShellInput input) {
         List<String> executable = new ArrayList<>();
-        executable.add(input.getCommand());
+        executable.add(executable.toString());
 
         String arguments = input.getArguments();
         if (arguments != null && !arguments.isEmpty()) {
@@ -21,6 +22,7 @@ public class ProcessExecutor {
 
         ProcessBuilder pb = new ProcessBuilder(executable);
         pb.inheritIO();
+
         try {
             pb.start().waitFor();
         } catch (IOException | InterruptedException e ) {

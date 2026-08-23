@@ -13,12 +13,20 @@ public class DirectoryResolver {
         this.ctx = ctx;
     }
 
-    public Optional<String> findExecutable(String target) {
+    public Optional<Path> findExecutable(String target) {
+        Path targetPath = Path.of(target);
+
+        if(targetPath.isAbsolute()) {
+            return Files.isExecutable(targetPath) ?
+                    Optional.of(targetPath) :
+                    Optional.empty();
+        }
+
         for (String route : ctx.getPath().split(File.pathSeparator)) {
             Path fullPath = Paths.get(route, target);
 
             if (Files.isExecutable(fullPath)) {
-                return Optional.of(fullPath.toString());
+                return Optional.of(fullPath);
             }
         }
         return Optional.empty();

@@ -2,6 +2,7 @@ package shell;
 
 import shell.command.ShellInput;
 
+import java.nio.file.Path;
 import java.util.*;
 
 public class ShellExecutor {
@@ -29,10 +30,10 @@ public class ShellExecutor {
     }
 
     private void resolveUnknown(ShellInput input) {
-        Optional<String> fullPath = execResolver.findExecutable(input.getCommand());
+        Optional<Path> fullPath = execResolver.findExecutable(input.getCommand());
 
         if (fullPath.isPresent()) {
-            processExecutor.executeProgram(input);
+            processExecutor.executeProgram(fullPath);
         } else {
             commandNotFound(input.getCommand());
         }
