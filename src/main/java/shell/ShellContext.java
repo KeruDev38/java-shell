@@ -13,9 +13,9 @@ public class ShellContext {
 //                    "."
 //            ));
 
-    private final Path home =
+    private final Path home = // Required by codecrafters
             Path.of(Objects.requireNonNullElse(
-                    System.getProperty("HOME"),
+                    System.getenv("HOME"),
                     "."
             ));
 
