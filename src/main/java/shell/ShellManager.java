@@ -9,9 +9,14 @@ public class ShellManager {
     private final Scanner sc;
     private final ShellExecutor executor;
 
-    public ShellManager(Scanner sc) {
+    public ShellManager(Scanner sc, ShellContext ctx) {
         this.sc = sc;
-        this.executor = new ShellExecutor();
+        ExecutableResolver resolver = new ExecutableResolver(ctx);
+        this.executor = new ShellExecutor(
+                new CommandService(ctx, resolver),
+                resolver,
+                new ProcessExecutor()
+        );
     }
 
     public void begin() {
