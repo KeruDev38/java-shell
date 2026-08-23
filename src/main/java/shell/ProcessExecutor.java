@@ -3,6 +3,7 @@ package shell;
 import shell.command.ShellInput;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +12,7 @@ import java.util.List;
 public class ProcessExecutor {
     public void executeProgram(Path executablePath, ShellInput input) {
         List<String> executable = new ArrayList<>();
-        executable.add(executable.toString());
+        executable.add(executablePath.toString());
 
         String arguments = input.getArguments();
         if (arguments != null && !arguments.isEmpty()) {
