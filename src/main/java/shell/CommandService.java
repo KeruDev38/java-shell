@@ -5,19 +5,20 @@ import shell.command.Execution;
 import shell.command.ShellInput;
 import shell.exception.InvalidCommandException;
 
+import java.nio.file.Path;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 
 public class CommandService {
-    private final ExecutableResolver resolver;
+    private final DirectoryResolver resolver;
     private final ShellContext ctx;
     private final Map<CommandType, Execution> commandsMap =
             new EnumMap<>(CommandType.class);
 
     public CommandService(
             ShellContext ctx,
-            ExecutableResolver resolver
+            DirectoryResolver resolver
     ) {
         this.ctx = ctx;
         this.resolver = resolver;
@@ -41,7 +42,7 @@ public class CommandService {
             return true;
         }
 
-        Optional<String> executable = resolver.find(target);
+        Optional<String> executable = resolver.findExecutable(target);
 
         if (executable.isPresent()) {
             System.out.println(target + " is " + executable.get());
@@ -54,6 +55,17 @@ public class CommandService {
 
     private boolean pwd(ShellInput input) {
         System.out.println(ctx.getWorkingDir());
+        return true;
+    }
+
+    public boolean cd(ShellInput input) {
+        Optional<Path> directory = resolver.find(input.getArguments());
+
+        if (directory.isPresent()) {
+            ctx.setWorkingDir(directory.get());
+        } else {
+            System.out.println("cd: " + input.getArguments() + ": No such file or directory");
+        }
         return true;
     }
 

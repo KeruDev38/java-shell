@@ -2,17 +2,16 @@ package shell;
 
 import shell.command.ShellInput;
 
-import java.io.IOException;
 import java.util.*;
 
 public class ShellExecutor {
     private final CommandService commandService;
-    private final ExecutableResolver execResolver;
+    private final DirectoryResolver execResolver;
     private final ProcessExecutor processExecutor;
 
     public ShellExecutor(
             CommandService commandService,
-            ExecutableResolver resolver,
+            DirectoryResolver resolver,
             ProcessExecutor processExecutor
     ) {
         this.commandService = commandService;
@@ -30,7 +29,7 @@ public class ShellExecutor {
     }
 
     private void resolveUnknown(ShellInput input) {
-        Optional<String> fullPath = execResolver.find(input.getCommand());
+        Optional<String> fullPath = execResolver.findExecutable(input.getCommand());
 
         if (fullPath.isPresent()) {
             processExecutor.executeProgram(input);

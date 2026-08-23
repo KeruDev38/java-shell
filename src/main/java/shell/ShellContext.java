@@ -13,4 +13,8 @@ public class ShellContext {
     public Path getWorkingDir() {
         return workingDir;
     }
+
+    public void setWorkingDir(Path workingDir) {
+        this.workingDir = workingDir;
+    }
 }

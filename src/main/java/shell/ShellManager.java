@@ -11,7 +11,7 @@ public class ShellManager {
 
     public ShellManager(Scanner sc, ShellContext ctx) {
         this.sc = sc;
-        ExecutableResolver resolver = new ExecutableResolver(ctx);
+        DirectoryResolver resolver = new DirectoryResolver(ctx);
         this.executor = new ShellExecutor(
                 new CommandService(ctx, resolver),
                 resolver,
