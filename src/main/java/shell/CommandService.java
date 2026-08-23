@@ -26,6 +26,7 @@ public class CommandService {
         commandsMap.put(CommandType.ECHO, this::echo);
         commandsMap.put(CommandType.TYPE, this::type);
         commandsMap.put(CommandType.PWD, this::pwd);
+        commandsMap.put(CommandType.CD, this::cd);
         commandsMap.put(CommandType.EXIT, this::exit);
     }
 

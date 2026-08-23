@@ -4,7 +4,8 @@ public enum CommandType {
     EXIT("exit"),
     ECHO("echo"),
     TYPE("type"),
-    PWD("pwd");
+    PWD("pwd"),
+    CD("cd");
 
     private final String name;
 
