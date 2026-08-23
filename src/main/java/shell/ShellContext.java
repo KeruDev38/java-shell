@@ -7,9 +7,15 @@ public class ShellContext {
     private final String path =
             Objects.requireNonNullElse(System.getenv("PATH"), "");
 
+//    private final Path home =
+//            Path.of(Objects.requireNonNullElse(
+//                    System.getProperty("user.home"),
+//                    "."
+//            ));
+
     private final Path home =
             Path.of(Objects.requireNonNullElse(
-                    System.getProperty("user.home"),
+                    System.getProperty("HOME"),
                     "."
             ));
 
