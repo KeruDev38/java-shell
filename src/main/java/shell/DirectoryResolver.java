@@ -13,10 +13,7 @@ public class DirectoryResolver {
     }
 
     public Optional<Path> findExecutable(String target) {
-        // Home
-        if (isHome(target)) return Optional.of(ctx.getHome());
-
-        Path targetPath = Path.of(target);
+        Path targetPath = expandHome(target);
 
         // Absolute
         if(targetPath.isAbsolute()) {
@@ -50,10 +47,7 @@ public class DirectoryResolver {
     }
 
     public Optional<Path> find(String target) {
-        // Home
-        if (isHome(target)) return Optional.of(ctx.getHome());
-
-        Path targetPath = Path.of(target);
+        Path targetPath = expandHome(target);
 
         // Absolute
         if (targetPath.isAbsolute()) {
@@ -87,7 +81,13 @@ public class DirectoryResolver {
         return Optional.empty();
     }
 
-    private boolean isHome(String target) {
-        return target.equals("~");
+    private Path expandHome(String target) {
+        if (target.equals("~")) {
+            return ctx.getHome();
+        }
+        if (target.startsWith("~/" ) || target.startsWith("~\\")) {
+            return ctx.getHome().resolve(target.substring(2));
+        }
+        return Path.of(target);
     }
 }
