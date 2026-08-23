@@ -33,7 +33,7 @@ public class ShellExecutor {
         Optional<Path> fullPath = execResolver.findExecutable(input.getCommand());
 
         if (fullPath.isPresent()) {
-            processExecutor.executeProgram(fullPath.get(), input);
+            processExecutor.executeProgram(input);
         } else {
             commandNotFound(input.getCommand());
         }

@@ -10,9 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ProcessExecutor {
-    public void executeProgram(Path executablePath, ShellInput input) {
+    public void executeProgram(ShellInput input) {
         List<String> executable = new ArrayList<>();
-        executable.add(executablePath.toString());
+        executable.add(input.getCommand());
 
         String arguments = input.getArguments();
         if (arguments != null && !arguments.isEmpty()) {
