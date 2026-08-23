@@ -1,19 +1,16 @@
 package shell;
 
+import java.nio.file.Path;
+
 public class ShellContext {
     private final String path = System.getenv("PATH");
-    private String currentDir = path;
+    private Path workingDir = Path.of("").toAbsolutePath();
 
     public String getPath() {
         return path;
     }
 
-    public String getCurrentDir() {
-        return currentDir;
-    }
-
-    public String forwardDir(String dir) {
-        currentDir = currentDir + dir;
-        return currentDir;
+    public Path getWorkingDir() {
+        return workingDir;
     }
 }

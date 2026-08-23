@@ -53,7 +53,7 @@ public class CommandService {
     }
 
     private boolean pwd(ShellInput input) {
-        System.out.println(ctx.getCurrentDir());
+        System.out.println(ctx.getWorkingDir());
         return true;
     }
 
