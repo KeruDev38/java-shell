@@ -16,9 +16,21 @@ public class CommandParser {
             if (c == '\'') {
                 quote = quote == Quote.NONE
                     ? Quote.SINGLE
-                    : Quote.NONE;
+                    : quote == Quote.SINGLE
+                        ? Quote.NONE
+                        : quote;
 
-                continue;
+                if (quote != Quote.DOUBLE) continue;
+            }
+
+            if (c == '\"') {
+                quote = quote == Quote.NONE
+                        ? Quote.DOUBLE
+                        : quote == Quote.DOUBLE
+                        ? Quote.NONE
+                        : quote;
+
+                if (quote != Quote.SINGLE) continue;
             }
 
             if (Character.isWhitespace(c) && quote == Quote.NONE) {
