@@ -8,10 +8,22 @@ public class CommandParser {
         List<String> tokens = new ArrayList<>();
         StringBuilder currentToken = new StringBuilder();
 
+        boolean escaped = false;
         Quote quote = Quote.NONE;
 
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
+
+            if (escaped) {
+                currentToken.append(c);
+                escaped = false;
+                continue;
+            }
+
+            if (c == '\\') {
+                escaped = true;
+                continue;
+            }
 
             Quote newQuote = quote.toggle(c);
             if (newQuote != quote) {
