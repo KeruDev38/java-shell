@@ -20,7 +20,7 @@ public class CommandParser {
                 continue;
             }
 
-            if (c == '\\') {
+            if (c == '\\' && quote != Quote.SINGLE) {
                 escaped = true;
                 continue;
             }
