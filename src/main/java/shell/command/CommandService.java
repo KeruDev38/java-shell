@@ -1,8 +1,8 @@
-package shell;
+package shell.command;
 
-import shell.command.CommandType;
-import shell.command.Execution;
-import shell.command.ShellInput;
+import shell.DirectoryResolver;
+import shell.ShellContext;
+import shell.reader.ShellInput;
 import shell.exception.InvalidCommandException;
 
 import java.nio.file.Path;
@@ -31,12 +31,16 @@ public class CommandService {
     }
 
     private boolean echo(ShellInput input) {
-        System.out.println(input.getArguments());
+        System.out.println(String.join(" ", input.getArguments()));
         return true;
     }
 
     private boolean type(ShellInput input) {
-        String target = input.getArguments().trim();
+        if (!hasExactlyOneArgument(input)) {
+            return true;
+        }
+
+        String target = input.getArguments().getFirst();
 
         if (isCommand(target)) {
             System.out.println(target + " is a shell builtin");
@@ -60,12 +64,18 @@ public class CommandService {
     }
 
     public boolean cd(ShellInput input) {
-        Optional<Path> directory = resolver.find(input.getArguments());
+        if (!hasExactlyOneArgument(input)) {
+            return true;
+        }
+
+        String target = input.getArguments().getFirst();
+
+        Optional<Path> directory = resolver.findDir(target);
 
         if (directory.isPresent()) {
             ctx.setWorkingDir(directory.get());
         } else {
-            System.out.println("cd: " + input.getArguments() + ": No such file or directory");
+            System.out.println("cd: " + target + ": No such file or directory");
         }
         return true;
     }
@@ -86,5 +96,16 @@ public class CommandService {
 
     private boolean isCommand(CommandType type) {
         return type != null && commandsMap.containsKey(type);
+    }
+
+    private boolean hasExactlyOneArgument(ShellInput input) {
+        if (input.getArguments().size() != 1) {
+            System.out.println(
+                    input.getCommand() + ": expected exactly one argument"
+            );
+            return false;
+        }
+
+        return true;
     }
 }

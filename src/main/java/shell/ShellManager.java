@@ -1,6 +1,8 @@
 package shell;
 
-import shell.command.ShellInput;
+import shell.command.CommandService;
+import shell.reader.CommandReader;
+import shell.reader.ShellInput;
 import shell.exception.IncorrectConstructionException;
 
 import java.util.Scanner;
@@ -24,18 +26,9 @@ public class ShellManager {
 
         boolean running = true;
         while(running) {
-            ShellInput input = readCommand();
+            ShellInput input = CommandReader.readCommand();
             running = executor.execute(input);
         }
-    }
-
-    private ShellInput readCommand() {
-        System.out.print("$ ");
-        String[] splitted = sc.nextLine().trim().split("\\s+", 2);
-        return new ShellInput(
-                splitted[0],
-                splitted.length > 1 ? splitted[1] : ""
-        );
     }
 
     private void checkIntegrity() {

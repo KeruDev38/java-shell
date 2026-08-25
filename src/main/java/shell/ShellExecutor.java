@@ -1,13 +1,14 @@
 package shell;
 
-import shell.command.ShellInput;
+import shell.command.CommandService;
+import shell.reader.ShellInput;
 
 import java.nio.file.Path;
 import java.util.*;
 
 public class ShellExecutor {
     private final CommandService commandService;
-    private final DirectoryResolver execResolver;
+    private final DirectoryResolver dirResolver;
     private final ProcessExecutor processExecutor;
 
     public ShellExecutor(
@@ -16,7 +17,7 @@ public class ShellExecutor {
             ProcessExecutor processExecutor
     ) {
         this.commandService = commandService;
-        this.execResolver = resolver;
+        this.dirResolver = resolver;
         this.processExecutor = processExecutor;
     }
 
@@ -30,7 +31,7 @@ public class ShellExecutor {
     }
 
     private void resolveUnknown(ShellInput input) {
-        Optional<Path> fullPath = execResolver.findExecutable(input.getCommand());
+        Optional<Path> fullPath = dirResolver.findExecutable(input.getCommand());
 
         if (fullPath.isPresent()) {
             processExecutor.executeProgram(input);

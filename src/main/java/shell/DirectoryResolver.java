@@ -19,23 +19,23 @@ public class DirectoryResolver {
         if(targetPath.isAbsolute()) {
             Path normalized = targetPath.normalize();
 
-            return Files.isExecutable(normalized) ?
-                    Optional.of(normalized) :
-                    Optional.empty();
+            return Files.isRegularFile(normalized)
+                    ? Optional.of(normalized)
+                    : Optional.empty();
         }
 
         // Local
-        Path currentWorkDir = ctx.getWorkingDir();
-        Path resolvedLocal = currentWorkDir.resolve(targetPath).normalize();
+        if (target.contains("/") || target.contains(File.separator)) {
+            Path resolved = ctx.getWorkingDir()
+                    .resolve(targetPath)
+                    .normalize();
 
-        if (Files.isExecutable(resolvedLocal)) {
-            return Optional.of(resolvedLocal);
+            return Files.isRegularFile(resolved)
+                    ? Optional.of(resolved)
+                    : Optional.empty();
         }
 
         // Simple name
-        if (target.contains("/") || target.contains(File.separator))
-            return Optional.empty();
-
         for (String route : ctx.getPath().split(File.pathSeparator)) {
             Path fullPath = Path.of(route).resolve(targetPath).normalize();
 
@@ -46,39 +46,18 @@ public class DirectoryResolver {
         return Optional.empty();
     }
 
-    public Optional<Path> find(String target) {
+    public Optional<Path> findDir(String target) {
         Path targetPath = expandHome(target);
 
-        // Absolute
-        if (targetPath.isAbsolute()) {
-            Path normalized = targetPath.normalize();
+        Path resolved = targetPath.isAbsolute()
+                ? targetPath.normalize()
+                : ctx.getWorkingDir()
+                    .resolve(targetPath)
+                    .normalize();
 
-            return Files.exists(normalized) ?
-                    Optional.of(normalized) :
-                    Optional.empty();
-        }
-
-        // Local
-        Path currentWorkDir = ctx.getWorkingDir();
-        Path resolvedLocal = currentWorkDir.resolve(targetPath).normalize();
-
-        if (Files.exists(resolvedLocal)) {
-            return Optional.of(resolvedLocal);
-        }
-
-        // Simple name
-        if (target.contains("/") || target.contains(File.separator))
-            return Optional.empty();
-
-        for (String route : ctx.getPath().split(File.pathSeparator)) {
-            Path fullPath = Path.of(route).resolve(targetPath).normalize();
-
-            if (Files.exists(fullPath)) {
-                return Optional.of(fullPath);
-            }
-        }
-
-        return Optional.empty();
+        return Files.isDirectory(resolved)
+                ? Optional.of(resolved)
+                : Optional.empty();
     }
 
     private Path expandHome(String target) {
