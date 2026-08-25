@@ -13,24 +13,10 @@ public class CommandParser {
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
 
-            if (c == '\'') {
-                quote = quote == Quote.NONE
-                    ? Quote.SINGLE
-                    : quote == Quote.SINGLE
-                        ? Quote.NONE
-                        : quote;
-
-                if (quote != Quote.DOUBLE) continue;
-            }
-
-            if (c == '\"') {
-                quote = quote == Quote.NONE
-                        ? Quote.DOUBLE
-                        : quote == Quote.DOUBLE
-                        ? Quote.NONE
-                        : quote;
-
-                if (quote != Quote.SINGLE) continue;
+            Quote newQuote = quote.toggle(c);
+            if (newQuote != quote) {
+                quote = newQuote;
+                continue;
             }
 
             if (Character.isWhitespace(c) && quote == Quote.NONE) {
